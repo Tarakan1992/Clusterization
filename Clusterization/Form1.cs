@@ -33,9 +33,14 @@ namespace Clusterization
             pictureBoxImage.Image = _imageFilter.FillSomeSpace(new Bitmap(pictureBoxImage.Image));
 			pictureBoxImage.Image = _imageFilter.FillInternalSpace(new Bitmap(pictureBoxImage.Image));
 
-            var manager = new AttributeManager(_allocationRegions.Labeling(new Bitmap(pictureBoxImage.Image)));
-            var result = manager.StartProcessing();
-            Console.WriteLine("log");
+            var lables = _allocationRegions.Labeling(new Bitmap(pictureBoxImage.Image));
+            var manager = new AttributeManager(lables);
+            var dictionaryOfElement = manager.StartProcessing();
+            var cluster = new Clusterization(dictionaryOfElement);
+            var result = cluster.Kmedoits();
+
+            pictureBoxImage.Image = _imageFilter.SelectClusters(new Bitmap(pictureBoxImage.Image), lables, result);
+            Console.WriteLine(result);
         }
     }
 }

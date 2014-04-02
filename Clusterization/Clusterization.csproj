@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="AllocationRegions.cs" />
     <Compile Include="AttributeManager.cs" />
+    <Compile Include="Clusterization.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
