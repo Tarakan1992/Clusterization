@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Clusterization
@@ -12,10 +7,12 @@ namespace Clusterization
     public partial class Form1 : Form
     {
         private readonly ImageFilter _imageFilter;
+        private readonly AllocationRegions _allocationRegions;
 
         public Form1()
         {
             _imageFilter = new ImageFilter();
+            _allocationRegions = new AllocationRegions();
             InitializeComponent();
         }
 
@@ -23,7 +20,7 @@ namespace Clusterization
         {
             var result = loadImageDialog.ShowDialog();
 
-            if (result == System.Windows.Forms.DialogResult.OK)
+            if (result == DialogResult.OK)
             {
                 pictureBoxImage.Image = new Bitmap(loadImageDialog.FileName); 
             }
@@ -31,7 +28,14 @@ namespace Clusterization
 
         private void buttonClustering_Click(object sender, EventArgs e)
         {
+            pictureBoxImage.Image = _imageFilter.Grayscale(new Bitmap(pictureBoxImage.Image));
             pictureBoxImage.Image = _imageFilter.Binarization(new Bitmap(pictureBoxImage.Image));
+            pictureBoxImage.Image = _imageFilter.FillSomeSpace(new Bitmap(pictureBoxImage.Image));
+
+            var manager = new AttributeManager(_allocationRegions.Labeling(new Bitmap(pictureBoxImage.Image)));
+            var result = manager.StartProcessing();
+            Console.WriteLine("log");
+            // pictureBoxImage.Image = _allocationRegions.Labeling(new Bitmap(pictureBoxImage.Image));
         }
     }
 }
