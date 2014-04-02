@@ -2,6 +2,7 @@
 
 namespace Clusterization
 {
+	using System.Collections.Generic;
 
 	public class ImageFilter
 	{
@@ -80,6 +81,25 @@ namespace Clusterization
 
 
 			return dst;
+		}
+
+		public Bitmap SelectClusters(Bitmap src, int[,] labels, Dictionary<int, int> clusterInfo)
+		{
+			var dst = new Bitmap(src);
+
+			for (int i = 0; i < src.Width; i++)
+			{
+				for (int j = 0; j < src.Height; j++)
+				{
+					if (clusterInfo.ContainsKey(labels[i, j]))
+					{
+						dst.SetPixel(i, j, Color.FromArgb(clusterInfo[labels[i, j]] * 50, 0, clusterInfo[labels[i, j]] * 30));
+					}
+				}
+			}
+
+			return dst;
+
 		}
 
 		private bool CheckForIntrnalSpace(Bitmap src, int x, int y)
